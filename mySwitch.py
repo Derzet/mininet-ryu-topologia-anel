@@ -18,10 +18,12 @@ import sys
 from threading import Timer
 from datetime import datetime
 
-time1 = '8'
-time2 = '12'
+import os
 
-
+files = open(os.getenv("HOME")+ "/teste.txt", "r")
+time1,time2 = files.readline().split(":")
+print time1
+print time2
 
 class MySwitch(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
