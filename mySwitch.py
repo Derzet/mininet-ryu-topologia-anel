@@ -18,7 +18,7 @@ import sys
 from threading import Timer
 from datetime import datetime
 
-time1 = '11'
+time1 = '8'
 time2 = '12'
 
 
@@ -97,7 +97,7 @@ class MySwitch(app_manager.RyuApp):
         inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS,
                                              actions)]
         if select:
-            #Regra é valida durante 400 segundos
+            #Regra e valida durante 400 segundos
             mod = parser.OFPFlowMod(datapath=datapath, 
                                     priority=priority, match=match,hard_timeout=400,
                                     instructions=inst,table_id=1)
@@ -132,8 +132,9 @@ class MySwitch(app_manager.RyuApp):
             self.arp_table[arp_pkt.src_ip] = src  # ARP learning
 
         self.mac_to_port.setdefault(dpid, {})
+        '''
         self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
-
+        '''
         # Learn a mac address to avoid FLOOD next time.
         self.mac_to_port[dpid][src] = in_port
 
@@ -231,7 +232,8 @@ class MySwitch(app_manager.RyuApp):
     #Gerenciador de fluxo
     def permission(self,dpid,in_port,src,dst):
         #Regras estaticas
-        self.logger.debug("Definindo Regras estastica")
+        self.logger.debug("Definindo Regras estatica")
+        self.logger.debug("porta: %s , src: %s , dst: %s",in_port,src,dst)
         #para o switch1
         if dpid == 1:
                 #regras switch1 C1-C2 - Send - Receive
@@ -257,14 +259,15 @@ class MySwitch(app_manager.RyuApp):
                     return 3
                 
                 #Server3-Server - Recebe
-                if (in_port == 7 and src == '00:00:00:00:00:02' and dst == '00:00:00:00:00:04') :
-                    self.logger.debug("Fluxo Permitido Switch1 Server1-Server2")
+                if (in_port == 7 and src == '00:00:00:00:00:06' and dst == '00:00:00:00:00:02') :
+                    self.logger.debug("Fluxo Permitido Switch1 Server3-Server1")
                     return 8
 
                 # Server1-Server2 - Envia
                 if (in_port == 3  and src == '00:00:00:00:00:02' and dst == '00:00:00:00:00:04') :
-                    self.logger.debug("Fluxo Permitido Switch1 Server1-Server2")
-                    return 3
+                    self.logger.debug("Fluxo Permitido Switch1 Server1-Server3")
+                    return 2
+
         #para o switch2        
         elif dpid == 2:
                 #regras switch2 C2-C1 - Send - Receive
@@ -296,12 +299,12 @@ class MySwitch(app_manager.RyuApp):
                     return 2
                 
                 #Regra Server2-Server3 - Envia
-                if (in_port==2 and src == '00:00:00:00:00:05' and dst == '00:00:00:00:00:06') :
-                    self.logger.debug("Fluxo Permitido Switch2 Server1-Server2")
+                if (in_port==2 and src == '00:00:00:00:00:04' and dst == '00:00:00:00:00:06') :
+                    self.logger.debug("Fluxo Permitido Switch2 Server2-Server3")
                     return 5
+
         #para o switch3     
         elif dpid == 3:
-                
                 #regras switch3 C3-C1 - Send - Receive   
                 if (in_port==1 and src == '00:00:00:00:00:05' and dst == '00:00:00:00:00:01') :
                     self.logger.debug("Fluxo Permitido Switch3 Client3-Client1")
@@ -333,15 +336,19 @@ class MySwitch(app_manager.RyuApp):
                     self.logger.debug("Fluxo INTERMEDIARIO - Permitido Switch3 Client2-Client1")
                     return 7
 
-        self.logger.debug("Fluxo sem permissao,descarte de pacotes:")
+        self.logger.debug("Fluxo sem permissao,descarte de pacotes: porta: %s , src: %s , dst: %s",in_port,src,dst)
         return 0
 
 
 #verifica se esta dentro da hora especial
 def reservaBanda(time1,time2):
     horaAtual = datetime.now().strftime('%H')
-    print("Hora Atual: "+horaAtual)
-    if time1<horaAtual and horaAtual<time2:
+    horaAtualInt = int(horaAtual) 
+    time1Int = int(time1)
+    time2Int = int(time2)
+    print("Hora Atual:")
+    print(horaAtualInt)
+    if time1Int<horaAtualInt and horaAtualInt<time2Int:
         return True
     else: 
         return False
@@ -394,7 +401,7 @@ def alocaBanda():
                     "actions":{"queue": "0"} }
             r = requests.post(url,data=json.dumps(payload))
             print(r)
-        #faça essas configurações,atualizar a cada 60 segundos a regra
+        #faca essas configuracoes,atualizar a cada 60 segundos a regra
         time.sleep(60)
       
 #executa daqui a 20 segundos,listening
