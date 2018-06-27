@@ -362,47 +362,58 @@ def alocaBanda():
             print ('Alocada Banda Especial Para os Servidores')
             url = "http://localhost:8080/qos/rules/0000000000000001"
             payload = {"priority": "1",
-                    "match": {"nw_src":"10.0.0.2","nw_dst": "10.0.0.4","nw_proto": "TCP"}, 
+                    "match": {"nw_src":"10.0.0.2","nw_dst": "10.0.0.4","nw_proto": "TCP","nw_proto": "UDP"}, 
                     "actions":{"queue": "1"} }
             r = requests.post(url,data=json.dumps(payload))
             print(r)
             
+        
             url = "http://localhost:8080/qos/rules/0000000000000002"
             payload = {"priority": "1",
-                    "match": {"nw_src":"10.0.0.4","nw_dst": "10.0.0.6","nw_proto": "TCP"}, 
+                    "match": {"nw_src":"10.0.0.4","nw_dst": "10.0.0.6","nw_proto": "TCP","nw_proto": "UDP"}, 
                     "actions":{"queue": "1"} }
             r = requests.post(url,data=json.dumps(payload))
             print(r)
+
+          
             
             url = "http://localhost:8080/qos/rules/0000000000000003"
             payload = {"priority": "1",
-                    "match": {"nw_src":"10.0.0.6","nw_dst": "10.0.0.2","nw_proto": "TCP"}, 
+                    "match": {"nw_src":"10.0.0.6","nw_dst": "10.0.0.2","nw_proto": "TCP","nw_proto": "UDP"}, 
                     "actions":{"queue": "1"} }
             r = requests.post(url,data=json.dumps(payload))
             print(r)
+
+        
         #faca essas configuracoes
         else:
             print ('Banda Normal')
             url = "http://localhost:8080/qos/rules/0000000000000001"
             payload = {"priority": "1",
-                    "match": {"nw_src":"10.0.0.2","nw_dst": "10.0.0.4","nw_proto": "TCP"}, 
+                    "match": {"nw_src":"10.0.0.2","nw_dst": "10.0.0.4","nw_proto": "TCP","nw_proto": "UDP"}, 
                     "actions":{"queue": "0"} }
             r = requests.post(url,data=json.dumps(payload))
             print(r)
+
+          
             
             url = "http://localhost:8080/qos/rules/0000000000000002"
             payload = {"priority": "1",
-                    "match": {"nw_src":"10.0.0.4","nw_dst": "10.0.0.6","nw_proto": "TCP"}, 
+                    "match": {"nw_src":"10.0.0.4","nw_dst": "10.0.0.6","nw_proto": "TCP","nw_proto": "UDP"}, 
                     "actions":{"queue": "0"} }
             r = requests.post(url,data=json.dumps(payload))
             print(r)
+
+          
             
             url = "http://localhost:8080/qos/rules/0000000000000003"
             payload = {"priority": "1",
-                    "match": {"nw_src":"10.0.0.6","nw_dst": "10.0.0.2","nw_proto": "TCP"}, 
+                    "match": {"nw_src":"10.0.0.6","nw_dst": "10.0.0.2","nw_proto": "TCP","nw_proto": "UDP"}, 
                     "actions":{"queue": "0"} }
             r = requests.post(url,data=json.dumps(payload))
             print(r)
+
+          
         #faca essas configuracoes,atualizar a cada 60 segundos a regra
         time.sleep(60)
       
