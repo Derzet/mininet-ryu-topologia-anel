@@ -26,7 +26,7 @@ O que é Ryu?
   A topologia consiste de 6 hosts(Sendo 3 Clientes e 3 Servidores), 3 switches e 1 controlador principal 
   com limitação de banda em 30KB/s entre os links.
   
-
+![alt text](https://user-images.githubusercontent.com/17909363/46440095-c01ca980-c738-11e8-9711-1807fbcfe1ce.png)
              
  SW = Switch
  S = Servidor
